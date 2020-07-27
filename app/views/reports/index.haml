@@ -1,0 +1,45 @@
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        %h4 Coupon Users
+        %form{:class => "form-inline", :id => "coupon_search", :method => 'GET'}
+          .form-group
+            %select{:name => "coupon_id", :class => "form-control", :id => "coupon_select"}
+              %option
+              - @coupons&.each do |coupon|
+                %option{:value => "#{coupon&.id}"}=coupon.name
+          %input{:value => 'Search', :type => 'submit', :class => 'btn btn-default', :id => "coupon_search_button", :disabled => "true"}
+      .panel-body
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th User Email
+                %th Orders
+                %th Revenue
+              %tbody
+                - @coupon_orders&.each do |order|
+                  %tr
+                    %td=order["email"]
+                    %td=order["order_count"]
+                    %td=number_to_currency(order["revenue"], precision: 2)
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        %h4 Sales by product last 5 days
+      .panel-body
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Item
+                %th Quantity
+                %th Total
+              %tbody
+                - @orders&.each do |product|
+                  %tr
+                    %td=product["name"]
+                    %td=product["quantity"]
+                    %td=number_to_currency(product["price"], precision: 2)

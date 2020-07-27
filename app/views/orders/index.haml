@@ -1,0 +1,39 @@
+.row
+  .col-md-12
+    %h4 Orders
+    %form{:class => "form-inline", :id => "coupon_search", :method => 'GET'}
+      .form-group
+        %select{:name => "number", :class => "form-control", :id => "coupon_select"}
+          %option
+          - @order_items&.each do |order|
+            %option{:value => "#{order&.number}"}=order.number
+      %input{:value => 'Search', :type => 'submit', :class => 'btn btn-default', :id => "coupon_search_button", :disabled => "true"}
+      %br
+
+.row
+  .col-md-12  
+    .table-responsive
+      .table-responsive
+        %table.table
+          %thead
+            %th #
+            %th Name
+            %th Email
+            %th State
+          %tbody
+            - @orders&.each do |order|
+              %tr
+                %td
+                  %a{:href => "orders/#{order&.number}"}=order&.number
+                %td=order&.user&.name
+                %td=order&.user&.email
+                %td 
+                  - case order&.state
+                  - when 'building'
+                    .text-warning=order&.state
+                  - when 'arrived'
+                    .text-success=order&.state
+                  - when 'canceled'
+                    .text-danger=order&.state
+    = will_paginate @orders
+            

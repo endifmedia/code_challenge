@@ -1,0 +1,59 @@
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        %h4 Items from Order
+      .panel-body
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %tr
+                %th Item
+                %th Quantity
+                %th Price
+                %th Total
+              %tbody
+                - @order&.order_items&.each do |item|
+                  - if item.source_type == 'Product'
+                    %tr
+                      %td=item&.source&.name
+                      %td=item&.quantity
+                      %td=number_to_currency(item&.source&.msrp, precision: 2)
+                      %td=number_to_currency(item&.price, precision: 2)
+                %tr
+                  %td
+                  %td
+                  %td
+                  %td
+                    %strong=number_to_currency(@order&.total, precision: 2)
+.row
+  .col-md-4
+    .panel.panel-default
+      .panel-heading 
+        %h4 Shipping Information
+      .panel-body
+        %ul.list-unstyled
+          %li.unstyled
+            %strong=@order&.user&.name
+          - @user_address&.each do | address |
+            %li.unstyled=address&.address1
+            %li.unstyled=address&.address2
+            %li.unstyled="#{address&.city} #{address&.zipcode} #{address&.state}"
+  .col-md-8
+    .panel.panel-default
+      .panel-heading 
+        %h4 Payment Details
+      .panel-body
+        .table-responsive
+          %table.table.table-striped
+            %thead
+              %th Payment Type
+              %th Amount
+              %th Status
+            %tbody
+              - @order&.payments&.each do |payment|
+                %tr
+                  %td=payment&.payment_type
+                  %td=number_to_currency(payment&.amount, precision: 2)
+                  %td=payment&.state
+    
